@@ -1,3 +1,4 @@
 module Paula
-  class InvalidFrequencyError < StandardError; end
+  class FrequencyError < StandardError; end
+  class LoadError; end
 end
