@@ -2,6 +2,7 @@ require 'paula/exceptions'
 
 module Paula
   class Player
+    include Enumerable
 
     class << self
       def self.attr_bool *vals
