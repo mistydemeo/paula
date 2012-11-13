@@ -19,6 +19,8 @@ module Paula
         MDXMini.mdx_open @mini, File.expand_path(file), File.dirname(file)
         MDXMini.mdx_set_max_loop @mini, @loops
 
+        @duration = MDXMini.mdx_get_length @mini
+
         @buffers_generated = 0
       end
 
@@ -43,7 +45,7 @@ module Paula
       end
 
       def duration
-        MDXMini.mdx_get_length @mini
+        @duration
       end
     end
   end
