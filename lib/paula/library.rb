@@ -1,3 +1,5 @@
+require 'paula'
+
 module Paula
   module Library
     def declare_library
