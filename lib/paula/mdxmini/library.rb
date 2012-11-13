@@ -35,6 +35,10 @@ module Paula
         :pdx, :pointer,
         :self, :pointer
       )
+
+      def self.release ptr
+        MDXMini.mdx_stop(ptr)
+      end
     end
   end
 end
