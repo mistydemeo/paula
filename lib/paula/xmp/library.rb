@@ -115,6 +115,13 @@ module Paula
       )
     end
 
+    class XmpSequence < FFI::Struct
+      layout(
+             :entry_point, :int,
+             :duration, :int
+      )
+    end
+
     class XmpModule < FFI::Struct
       layout(
              :name, [:char, 64],
@@ -150,13 +157,6 @@ module Paula
              :pan, :uchar,
              :reserved, :uchar,
              :event, XmpEvent
-      )
-    end
-
-    class XmpSequence < FFI::Struct
-      layout(
-             :entry_point, :int,
-             :duration, :int
       )
     end
 
