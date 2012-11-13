@@ -7,7 +7,7 @@ describe Paula::Library do
   end
 
   it "should be able to declare a library via DSL method" do
-    klass = Class.new do
+    class LibraryTestClass
       class Player < Paula::Player
         extensions 'foo'
       end
@@ -16,6 +16,6 @@ describe Paula::Library do
       declare_library
     end
 
-    Paula.plays('foo').must_equal klass
+    Paula.plays('foo').must_equal [LibraryTestClass::Player]
   end
 end
