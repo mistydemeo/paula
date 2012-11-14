@@ -136,10 +136,10 @@ module Paula
              :len, :int,
              :rst, :int,
              :gvl, :int,
-             :xxp, XmpPattern,
-             :xxt, XmpTrack,
-             :xxi, XmpInstrument,
-             :xxs, XmpSample,
+             :xxp, XmpPattern.ptr,
+             :xxt, XmpTrack.ptr,
+             :xxi, XmpInstrument.ptr,
+             :xxs, XmpSample.ptr,
              :xxc, [XmpChannel, 64],
              :xxo, [:uchar, 256]
       )
@@ -181,11 +181,11 @@ module Paula
              :virt_used, :int,
              :vol_base, :int,
              :channel_info, [XmpModuleInfoChannelInfo, 64],
-             :mod, XmpModule,
+             :mod, XmpModule.ptr,
              :comment, :pointer,
              :sequence, :int,
              :num_sequences, :int,
-             :seq_data, XmpSequence
+             :seq_data, XmpSequence.ptr
       )
 
       def buffer
