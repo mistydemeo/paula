@@ -145,7 +145,7 @@ module Paula
       )
     end
 
-    class XmpModuleInfoChannelInfo < FFI::Struct
+    class XmpChannelInfo < FFI::Struct
       layout(
              :period, :uint,
              :position, :uint,
@@ -180,7 +180,7 @@ module Paula
              :virt_channels, :int,
              :virt_used, :int,
              :vol_base, :int,
-             :channel_info, [XmpModuleInfoChannelInfo, 64],
+             :channel_info, [XmpChannelInfo, 64],
              :mod, XmpModule.ptr,
              :comment, :pointer,
              :sequence, :int,
