@@ -40,6 +40,18 @@ module Paula
         @info.buffer
       end
 
+      def title
+        return nil if @info[:mod].null?
+
+        @info[:mod][:name].to_s
+      end
+
+      def comment
+        return nil if @info[:comment].null?
+
+        @info[:comment].to_s
+      end
+
       # TODO: implement timeout
       def complete?
         @info[:loop_count] > @loops
