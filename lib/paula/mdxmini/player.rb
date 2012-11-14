@@ -7,6 +7,10 @@ module Paula
       supports_title
       supports_notes
 
+      def self.finalize ptr
+        proc { MDXMini.mdx_stop ptr }
+      end
+
       def initialize file, opts
         super
 
@@ -22,6 +26,8 @@ module Paula
         @duration = MDXMini.mdx_get_length @mini
 
         @buffers_generated = 0
+
+        ObjectSpace.define_finalizer(self, self.class.finalize(@mini))
       end
 
       def next_sample

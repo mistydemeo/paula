@@ -27,7 +27,7 @@ module Paula
     attach_function :mdx_get_sample_size, [:pointer], :int
     attach_function :mdx_get_buffer_size, [:pointer], :int
 
-    class T_mdxmini < FFI::ManagedStruct
+    class T_mdxmini < FFI::Struct
       layout(
         :samples, :int,
         :channels, :int,
@@ -35,10 +35,6 @@ module Paula
         :pdx, :pointer,
         :self, :pointer
       )
-
-      def self.release ptr
-        MDXMini.mdx_stop(ptr)
-      end
     end
   end
 end
