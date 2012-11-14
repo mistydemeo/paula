@@ -57,6 +57,10 @@ module Paula
       def duration
         @duration
       end
+
+      def channels
+        MDXMini.mdx_get_tracks @mini
+      end
     end
   end
 end

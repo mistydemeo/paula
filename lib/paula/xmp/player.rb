@@ -69,6 +69,10 @@ module Paula
       def current_loop
         @info[:loop_count]
       end
+
+      def channels
+        @info[:virt_channels]
+      end
     end
   end
 end

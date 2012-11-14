@@ -129,6 +129,10 @@ describe Paula::Player do
     @player.loops_to_play.must_equal 1
   end
 
+  it "should default to 0 channels" do
+    @player.channels.must_equal 0
+  end
+
   it "should always report that it is complete by default" do
     # because specific behaviour needs to be subclassed
     assert @player.complete?

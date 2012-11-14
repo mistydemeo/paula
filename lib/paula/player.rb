@@ -91,5 +91,9 @@ module Paula
     # c) whether the timeout period has elapsed. The default timeout is
     #    512 seconds, but can be overridden while creating the player.
     def complete?; true; end
+    # The number of channels in the current song. This might be variable
+    # depending on the song, or fixed if the hardware being emulated has
+    # a specific number of channels.
+    def channels; 0; end
   end
 end
