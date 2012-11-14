@@ -37,6 +37,10 @@ module Paula
         @buffer.read_string(@buffer.size)
       end
 
+      def sample_size
+        @sample_size
+      end
+
       def title
         return @title if @title
 
