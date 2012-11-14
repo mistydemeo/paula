@@ -40,6 +40,11 @@ module Paula
         @info.buffer
       end
 
+      # Returns 0 if playback has not yet started.
+      def sample_size
+        @info[:buffer_size]
+      end
+
       def title
         return nil if @info[:mod].null?
 
@@ -59,6 +64,10 @@ module Paula
 
       def duration
         @info[:total_time]
+      end
+
+      def current_loop
+        @info[:loop_count]
       end
     end
   end
