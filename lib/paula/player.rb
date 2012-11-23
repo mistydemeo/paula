@@ -25,10 +25,8 @@ module Paula
       end
 
       def can_play? file
-        extension = File.extname(file)[1..-1]
-        extension.downcase if extension
-        prefix = File.basename(file, File.extname(file)).downcase
-        extensions.include?(extension) || extensions.include?(prefix)
+        prefix, suffix = Paula.split_filename file
+        extensions.include?(suffix) || extensions.include?(prefix)
       end
     end
 

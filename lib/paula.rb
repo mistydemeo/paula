@@ -12,5 +12,11 @@ module Paula
 
   def self.plays format
     @extensions[format]
+
+  def self.split_filename file
+    suffix = File.extname(file)[1..-1].downcase
+    prefix = File.basename(file, File.extname(file)).downcase
+
+    [prefix, suffix]
   end
 end

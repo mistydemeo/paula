@@ -9,4 +9,11 @@ describe Paula do
     Paula.plays('foo').must_equal [Foo]
     Paula.plays('bar').must_equal [Foo]
   end
+
+  it "should be able to split a filename into prefix and suffix" do
+    file = "song.mod"
+    prefix, suffix = Paula.split_filename file
+    prefix.must_equal "song"
+    suffix.must_equal "mod"
+  end
 end
