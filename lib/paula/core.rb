@@ -15,9 +15,9 @@ def Paula(file, opts)
 end
 
 module Paula
-  def self.add_formats library, extensions
-    @extensions ||= {}
+  @extensions = {}
 
+  def self.add_formats library, extensions
     extensions.each do |ext|
       @extensions[ext] ||= []
       @extensions[ext] << library
