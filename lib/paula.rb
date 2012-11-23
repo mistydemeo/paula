@@ -1,5 +1,21 @@
 require "paula/version"
 
+def Paula(file, opts)
+  prefix, suffix = Paula.split_filename file
+  players = Paula.plays(suffix) || Paula.plays(prefix)
+
+  # it's a reasonable guess that the significant part is a regular
+  # file extension, not an Amiga-style prefix
+  raise Paula::LoadError, "unrecognized filetype: #{suffix}" if players.nil?
+
+  begin
+    return players.shift.new(file, opts)
+  rescue Paula::LoadError
+  end while !players.empty?
+
+  raise Paula::LoadError, "no appropriate player found for #{file}"
+end
+
 module Paula
   def self.add_formats library, extensions
     @extensions ||= {}

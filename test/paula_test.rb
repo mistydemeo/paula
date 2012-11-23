@@ -8,6 +8,8 @@ describe Paula do
 
     Paula.plays('foo').must_equal [Foo]
     Paula.plays('bar').must_equal [Foo]
+
+    Paula.instance_variable_set :@extensions, {}
   end
 
   it "should be able to split a filename into prefix and suffix" do
@@ -15,5 +17,40 @@ describe Paula do
     prefix, suffix = Paula.split_filename file
     prefix.must_equal "song"
     suffix.must_equal "mod"
+  end
+
+  it "should be able to create an appropriate player object" do
+    file = "song.mod"
+
+    class Library
+      class Player < Paula::Player
+        extensions 'mod'
+      end
+
+      extend Paula::Library
+      declare_library
+    end
+
+    Paula(file, frequency: 44100).must_be_kind_of Library::Player
+    Paula.instance_variable_set :@extensions, {}
+  end
+
+  it "should raise if a player object is requested for an unrecognized filetype" do
+    lambda {Paula('file.foo', frequency: 44100)}.must_raise Paula::LoadError
+  end
+
+  it "should raise if no player could be found for the provided file" do
+    class FailLibrary
+      class Player < Paula::Player
+        extensions 'fail'
+        def initialize(*args); raise Paula::LoadError; end
+      end
+
+      extend Paula::Library
+      declare_library
+    end
+
+    lambda {Paula('file.fail', frequency: 44100)}.must_raise Paula::LoadError
+    Paula.instance_variable_set :@extensions, {}
   end
 end
