@@ -11,7 +11,10 @@ module Paula
   end
 
   def self.plays format
-    @extensions[format]
+    return nil unless @extensions[format]
+
+    @extensions[format].dup
+  end
 
   def self.split_filename file
     suffix = File.extname(file)[1..-1].downcase
