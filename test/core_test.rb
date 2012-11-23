@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require 'paula'
+require 'paula/core'
 
 describe Paula do
   it "should be able to keep track of supported formats and libraries" do

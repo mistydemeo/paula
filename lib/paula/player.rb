@@ -1,3 +1,4 @@
+require 'paula/core'
 require 'paula/exceptions'
 
 module Paula
