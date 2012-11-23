@@ -1,13 +1,7 @@
-require 'paula/library'
-require 'paula/xmp/player'
-
 require 'ffi'
 
 module Paula
   module XMP
-    extend Paula::Library
-    declare_library
-
     extend FFI::Library
     ffi_lib 'xmp'
 

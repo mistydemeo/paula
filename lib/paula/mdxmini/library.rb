@@ -1,13 +1,7 @@
-require 'paula/library'
-require 'paula/mdxmini/player'
-
 require 'ffi'
 
 module Paula
   module MDXMini
-    extend Paula::Library
-    declare_library
-
     extend FFI::Library
     ffi_lib "mdxmini"
 

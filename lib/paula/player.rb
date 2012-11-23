@@ -19,9 +19,11 @@ module Paula
         @maximum_frequency || @maximum_frequency = freq
       end
 
-      def extensions ext=nil
-        ext = [ext] unless ext.is_a? Array
-        @extensions || @extensions = ext
+      def extensions *ext
+        return @extensions if @extensions
+
+        Paula.add_formats self, ext
+        @extensions = ext
       end
 
       def can_play? file

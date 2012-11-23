@@ -26,9 +26,6 @@ describe Paula do
       class Player < Paula::Player
         extensions 'mod'
       end
-
-      extend Paula::Library
-      declare_library
     end
 
     Paula(file, frequency: 44100).must_be_kind_of Library::Player
@@ -45,9 +42,6 @@ describe Paula do
         extensions 'fail'
         def initialize(*args); raise Paula::LoadError; end
       end
-
-      extend Paula::Library
-      declare_library
     end
 
     lambda {Paula('file.fail', frequency: 44100)}.must_raise Paula::LoadError

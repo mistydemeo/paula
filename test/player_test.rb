@@ -25,10 +25,18 @@ describe Paula::Player do
 
   it "should be able to specify the supported extensions" do
     klass = Class.new(Paula::Player) do
-      extensions ['foo', 'bar', 'baz']
+      extensions 'foo', 'bar', 'baz'
     end
 
     klass.extensions.must_equal ['foo', 'bar', 'baz']
+  end
+
+  it "should declare its extensions to Paula when created" do
+    klass = Class.new(Paula::Player) do
+      extensions 'unique'
+    end
+
+    Paula.plays('unique').must_equal [klass]
   end
 
   it "should be able to specify a single extension string" do
@@ -41,7 +49,7 @@ describe Paula::Player do
 
   it "should be able to report if it can play a file" do
     klass = Class.new(Paula::Player) do
-      extensions ['foo']
+      extensions 'foo'
     end
 
     assert klass.can_play?('file.foo')
@@ -50,7 +58,7 @@ describe Paula::Player do
 
   it "should also be able to figure out amiga-style filenames" do
     klass = Class.new(Paula::Player) do
-      extensions ['mod']
+      extensions 'mod'
     end
 
     assert klass.can_play?('mod.this_is_a_song')
