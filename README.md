@@ -19,10 +19,10 @@ player = Paula('path/to/file', opts)
 
 Supported options:
 
-:frequency - The playback frequency, in Hz. Mandatory. Currently, specifying a
+* :frequency - The playback frequency, in Hz. Mandatory. Currently, specifying a
 frequency higher than a player's maximum supported frequency raises an exception;
 this is temporary, until resampling is implemented.
-:loops - The number of times the song should loop before finishing. Defaults to 1.
+* :loops - The number of times the song should loop before finishing. Defaults to 1.
 
 Generate audio samples using the `#next_sample` method. This moves the song's 
 position forward, so you can play back music with a simple loop like:
@@ -41,11 +41,13 @@ player.each {|s| speakers << s}
 ## FAQ
 
 Q: How do I restart a song?
+
 A: Right now, you should restart a song by recreating the player object. A
 `#restart` instance method might be added later, which would just be sugar for
 recreating the object manually.
 
 Q: Can I seek to another position?
+
 A: Right now, no. Rewinding isn't supported, because most chiptune players aren't 
 capable of rewinding the song. Seeking forward just isn't implemented, though you
 can just call `#next_sample` until you reach the point you want.
