@@ -70,7 +70,7 @@ module Paula
     # The values for the following methods should be overridden in subclasses.
 
     # The title of the song. Only use this for real titles, not filenames.
-    # Return nil if there is no filename, even if the player supports names.
+    # Return nil if there is no title, even if the player supports titles.
     # When returning a string, encoding should be UTF-8.
     def title; nil; end
     # Non-title metadata about the song. You might want to generate this
@@ -87,11 +87,10 @@ module Paula
     def current_loop; 0; end
     # Return true if the song is finished. If the player has no internal
     # function to determine if playback is complete, it should be based on
-    # a) whether the elapsed time has exceeded the song's length, if the
-    #    song length is reliable,
-    # b) whether the requested number of loops have been played,
-    # c) whether the timeout period has elapsed. The default timeout is
-    #    512 seconds, but can be overridden while creating the player.
+    #
+    # 1. whether the elapsed time has exceeded the song's length, if the song length is reliable,
+    # 2. whether the requested number of loops have been played,
+    # 3. whether the timeout period has elapsed. The default timeout is 512 seconds, but can be overridden while creating the player.
     def complete?; true; end
     # The number of channels in the current song. This might be variable
     # depending on the song, or fixed if the hardware being emulated has
