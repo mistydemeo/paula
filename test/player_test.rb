@@ -129,8 +129,8 @@ describe Paula::Player do
     @player.next_sample.must_equal ""
   end
 
-  it "should report the sample size as 0 by default" do
-    @player.sample_size.must_equal 0
+  it "should report the sample size as nil by default" do
+    @player.sample_size.must_equal nil
   end
 
   it "should report the number of loops to play" do

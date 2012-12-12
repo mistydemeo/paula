@@ -79,8 +79,11 @@ module Paula
     # Return the next raw audio sample in the song. Moves the internal
     # position forward.
     def next_sample; ""; end
-    # The size of a sample in bytes. Should be consistent.
-    def sample_size; 0; end
+    # The size of a sample in bytes. Should be consistent. If the value
+    # is indeterminate (for example, if the player doesn't provide this
+    # information until after playback starts and no sample has been
+    # generated yet), you should return nil.
+    def sample_size; nil; end
     # The song's total duration, if possible to estimate. Should be measured in
     # milliseconds. Should return nil if the duration is unknown.
     def duration; 0; end
