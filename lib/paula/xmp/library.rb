@@ -187,6 +187,13 @@ module Paula
       end
     end
 
+  class XmpTestInfo < FFI::Struct
+    layout(
+           :name, [:char, 64],
+           :type, [:char, 64]
+    )
+  end
+
     attach_function :xmp_create_context, [  ], :pointer
     attach_function :xmp_test_module, [ :pointer, :pointer ], :int
     attach_function :xmp_free_context, [ :pointer ], :void

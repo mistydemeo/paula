@@ -27,6 +27,9 @@ module Paula
         @extensions = ext
       end
 
+      # Subclasses should override this with library-specific
+      # logic if they have the ability to detect formats based on
+      # something other than the extension.
       def can_play? file
         prefix, suffix = Paula.split_filename file
         extensions.include?(suffix) || extensions.include?(prefix)
