@@ -27,7 +27,7 @@ describe Paula do
 
   it "should be able to create an appropriate player object given a player that autodetects formats" do
     autodetect_player = Class.new(Paula::Player) do
-      detects_format
+      detects_formats
 
       def self.can_play? file
         true if File.extname(file) == '.format'
@@ -49,13 +49,13 @@ describe Paula do
 
   it "should be able to prefer a player that autodetects formats" do
     player1 = Class.new(Paula::Player) do
-      detects_format
+      detects_formats
       def self.can_play? file
         File.extname(file) == '.format'
       end
     end
     player2 = Class.new(Paula::Player) do
-      detects_format
+      detects_formats
       def self.can_play? file
         File.extname(file) == '.format'
       end
@@ -69,7 +69,7 @@ describe Paula do
 
   it "should select a preferred player by extension before a preferred autodetecting player" do
     player1 = Class.new(Paula::Player) do
-      detects_format
+      detects_formats
       def self.can_play? file
         File.extname(file) == '.format'
       end
