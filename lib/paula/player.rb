@@ -14,7 +14,7 @@ module Paula
       end
 
       attr_bool :supports_title, :supports_comment, :supports_instruments,
-        :supports_notes
+        :supports_notes, :supports_composer
 
       def maximum_frequency freq=nil
         @maximum_frequency || @maximum_frequency = freq
@@ -85,6 +85,10 @@ module Paula
     # Return nil if there is no title, even if the player supports titles.
     # When returning a string, encoding should be UTF-8.
     def title; nil; end
+    # The composer of the song, if contained in the metadata. Return nil
+    # if there is no composer, even if the player supports composers.
+    # When returning a string, encoding should be UTF-8.
+    def composer; nil; end
     # Non-title metadata about the song. You might want to generate this
     # from multiple other fields. Return nil if there is no appropriate comment.
     def comment; nil; end

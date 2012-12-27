@@ -101,6 +101,10 @@ describe Paula::Player do
     @player.title.must_be_nil
   end
 
+  it "should return nil as the default composer" do
+    @player.composer.must_be_nil
+  end
+
   it "should be able to return the player's filename" do
     @player.filename.must_equal 'file'
   end
