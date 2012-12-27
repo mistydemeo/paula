@@ -40,8 +40,8 @@ module Paula
       # logic if they have the ability to detect formats based on
       # something other than the extension.
       def can_play? file
-        prefix, suffix = Paula.split_filename file
-        extensions.include?(suffix) || extensions.include?(prefix)
+        file = Paula::SongFile.new(file)
+        extensions.include?(file.suffix) || extensions.include?(file.prefix)
       end
     end
 

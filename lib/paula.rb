@@ -1,5 +1,6 @@
 require 'paula/core'
 require 'paula/player'
+require 'paula/songfile'
 require "paula/version"
 
 # FFI libraries raise a LoadError if the required dynamic library

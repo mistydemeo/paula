@@ -21,7 +21,7 @@ module Paula
         raise Paula::LoadError, "#{file} does not exist" unless File.exist? file
 
         test_info = XMP::XmpTestInfo.new
-        XMP.xmp_test_module(file, test_info) == 0 ? true : false
+        XMP.xmp_test_module(file.to_s, test_info) == 0 ? true : false
       end
 
       def initialize file, opts

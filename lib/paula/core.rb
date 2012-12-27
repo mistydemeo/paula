@@ -1,3 +1,5 @@
+require 'paula/songfile'
+
 module Kernel
   # Request a player object given a file and options.
   # The order in which players will be queried is:
@@ -6,10 +8,10 @@ module Kernel
   # 3. Regular players which autodetect formats
   # 4. Regular players by file extension
   def Paula(file, opts)
-    prefix, suffix = Paula.split_filename file
+    file = Paula::SongFile.new(file)
 
     # iterate through preferred players for the given file extension
-    players = Paula.plays(suffix, preferred: true) || Paula.plays(prefix, preferred: true)
+    players = file.played_by(preferred: true)
     if players
       begin
         return players.shift.new(file, opts)
@@ -27,11 +29,11 @@ module Kernel
     return player.new(file, opts) if player
 
     # if we still didn't find anything, look up the full player/extension map
-    players = Paula.plays(suffix) || Paula.plays(prefix)
+    players = file.played_by(preferred: false)
     # raise an exception if no players were found
     # it's a reasonable guess that the significant part is a regular
     # file extension, not an Amiga-style prefix
-    raise Paula::LoadError, "unrecognized filetype: #{suffix}" if players.nil?
+    raise Paula::LoadError, "unrecognized filetype: #{file.suffix}" if players.nil?
 
     begin
       return players.shift.new(file, opts)
@@ -84,12 +86,5 @@ module Paula
       return unless @extension_map[format]
       @extension_map[format].dup
     end
-  end
-
-  def self.split_filename file
-    suffix = File.extname(file)[1..-1].downcase
-    prefix = File.basename(file, File.extname(file)).downcase
-
-    [prefix, suffix]
   end
 end
