@@ -46,9 +46,9 @@ module Paula
         @info.buffer
       end
 
-      # Returns 0 if playback has not yet started.
+      # Returns nil if playback has not yet started.
       def sample_size
-        @info[:buffer_size]
+        @info[:buffer_size] == 0 ? nil : @info[:buffer_size]
       end
 
       def title
