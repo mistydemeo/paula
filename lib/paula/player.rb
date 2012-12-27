@@ -27,6 +27,15 @@ module Paula
         @extensions = ext
       end
 
+      def detects_format
+        return if @detects_format
+
+        @detects_format = true
+        Paula.add_player self
+      end
+
+      def detects_format?; @detects_format || false; end
+
       # Subclasses should override this with library-specific
       # logic if they have the ability to detect formats based on
       # something other than the extension.

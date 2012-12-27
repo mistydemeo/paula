@@ -3,8 +3,7 @@ require 'paula/player'
 module Paula
   module XMP
     class Player < Paula::Player
-      # TODO: add the full list of XMP's extensions
-      extensions %w[mod xm]
+      detects_formats
       maximum_frequency 48000
       supports_title
       supports_comment
