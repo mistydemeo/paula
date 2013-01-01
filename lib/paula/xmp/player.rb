@@ -18,7 +18,7 @@ module Paula
       end
 
       def self.can_play? file
-        raise Paula::LoadError, "#{file} does not exist" unless File.exist? file
+        raise Paula::LoadError, "#{file} does not exist" unless file.exist?
 
         test_info = XMP::XmpTestInfo.new
         XMP.xmp_test_module(file.to_s, test_info) == 0 ? true : false
@@ -30,7 +30,7 @@ module Paula
         @context = XMP.xmp_create_context
         @info    = XMP::XmpModuleInfo.new
 
-        if !XMP.xmp_load_module @context, file
+        if !XMP.xmp_load_module @context, file.to_s
           raise Paula::LoadError, "could not open file #{file}"
         end
 

@@ -1,10 +1,16 @@
 require 'minitest/autorun'
+require 'tmpdir'
+require 'fileutils'
+
 require 'paula/songfile'
 require 'paula/player'
 
 describe Paula::SongFile do
   before do
+    @tmpdir = Dir.mktmpdir
+    Dir.chdir @tmpdir
     @file = Paula::SongFile.new('song.mod')
+    FileUtils.touch @file
 
     @player = Class.new(Paula::Player) { extensions 'mod' }
     @preferred = Class.new(Paula::Player) { extensions 'mod' }
@@ -28,11 +34,30 @@ describe Paula::SongFile do
   end
 
   it "should be able to return a string representation of itself" do
-    @file.to_s.must_equal 'song.mod'
+    @file.to_s.must_equal File.realpath(File.join(@tmpdir, 'song.mod'))
+  end
+
+  # This ensures that it can be used as an argument to methods that
+  # expect strings
+  it "should be implicitly convertable to a string" do
+    String.try_convert(@file).wont_be_nil
   end
 
   it "should be able to return a Pathname representation of itself" do
-    @file.to_pn.must_equal Pathname('song.mod')
+    @file.to_pn.must_equal Pathname('song.mod').expand_path
+  end
+
+  it "should be able to report its size" do
+    @file.size.must_equal 0
+  end
+
+  it "should be able to report if it exists" do
+    assert @file.exist?
+    refute Paula::SongFile.new('foo').exist?
+  end
+
+  it "should be able to return a string representation of its directory" do
+    @file.dirname.must_equal File.realpath(@tmpdir)
   end
 
   it "should be able to create an appropriate player object based on file extension" do
@@ -104,5 +129,7 @@ describe Paula::SongFile do
     Paula.instance_variable_set :@extension_map, {}
     Paula.instance_variable_set :@preferred, []
     Paula.instance_variable_set :@preferred_map, {}
+
+    FileUtils.remove_entry_secure @tmpdir
   end
 end

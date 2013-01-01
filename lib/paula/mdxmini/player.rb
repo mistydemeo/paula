@@ -20,7 +20,7 @@ module Paula
         @buffers_per_second = ((@frequency * 16 * 2) / 8) / @sample_size.to_f
 
         @mini = T_mdxmini.new
-        MDXMini.mdx_open @mini, File.expand_path(file), File.dirname(file)
+        MDXMini.mdx_open @mini, file.to_s, file.dirname
         MDXMini.mdx_set_max_loop @mini, @loops
 
         @duration = MDXMini.mdx_get_length @mini

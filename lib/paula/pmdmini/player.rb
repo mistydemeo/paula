@@ -24,8 +24,8 @@ module Paula
 
         # Probably an upstream bug; pmdmini segfaults if pmd_is_pmd()
         # is not called on the file before pmd_play begins
-        PMDMini.pmd_is_pmd File.expand_path(file)
-        PMDMini.pmd_play File.expand_path(file)
+        PMDMini.pmd_is_pmd file.to_s
+        PMDMini.pmd_play file.to_s
         @duration = PMDMini.pmd_length_sec
 
         @buffers_generated = 0

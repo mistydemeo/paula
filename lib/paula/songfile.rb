@@ -4,7 +4,7 @@ module Paula
   class SongFile
     def initialize file
       return file if file.is_a? Paula::SongFile
-      @file = Pathname(file)
+      @file = Pathname(File.expand_path file)
     end
 
     def prefix
@@ -53,5 +53,8 @@ module Paula
     def to_s; @file.to_s; end
     def to_str; @file.to_s; end
     def to_pn; @file; end
+    def dirname; @file.dirname.to_s; end
+    def exist?; @file.exist?; end
+    def size; @file.size; end
   end
 end
