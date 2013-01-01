@@ -110,7 +110,7 @@ describe Paula::Player do
   end
 
   it "should be able to return the full path to the file" do
-    @player.path.must_equal '/path/to/file'
+    @player.path.to_s.must_equal '/path/to/file'
   end
 
   it "should be able to report the playback frequency" do

@@ -1,5 +1,6 @@
 require 'paula/core'
 require 'paula/exceptions'
+require 'paula/songfile'
 
 module Paula
   class Player
@@ -46,7 +47,7 @@ module Paula
     end
 
     def initialize file, opts
-      @filename  = file
+      @filename  = Paula::SongFile.new(file)
       @loops     = opts[:loops] || 1
       @frequency = opts[:frequency]
 
