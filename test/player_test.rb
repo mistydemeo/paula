@@ -161,4 +161,11 @@ describe Paula::Player do
   it "should default to one loop if not specified" do
     @player.class.new('file', frequency: 44100).loops_to_play.must_equal 1
   end
+
+  after do
+    Paula.instance_variable_set :@players, []
+    Paula.instance_variable_set :@extension_map, {}
+    Paula.instance_variable_set :@preferred, []
+    Paula.instance_variable_set :@preferred_map, {}
+  end
 end
