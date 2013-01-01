@@ -2,12 +2,36 @@ require 'minitest/autorun'
 require 'paula/core'
 
 describe Paula do
-  it "should be able to keep track of supported formats and libraries" do
-    class Foo; end
-    Paula.add_formats Foo, ['foo', 'bar']
+  before do
+    @player_klass
+  end
 
-    Paula.plays('foo').must_equal [Foo]
-    Paula.plays('bar').must_equal [Foo]
+  it "should be able to keep track of supported formats and libraries" do
+    klass = Class.new
+    Paula.add_formats klass, ['foo', 'bar']
+
+    Paula.plays('foo').must_equal [klass]
+    Paula.plays('bar').must_equal [klass]
+  end
+
+  it "should be able to track a player which autodetects formats" do
+    klass = Class.new
+    Paula.add_player klass
+    Paula.autodetectors.must_include klass
+  end
+
+  it "should be able to prefer a player for a format" do
+    klass = Class.new
+    Paula.add_formats klass, ['foo', 'bar']
+    Paula.prefer 'foo' => klass
+    Paula.plays('foo', preferred: true).must_equal [klass]
+  end
+
+  it "should be able to prefer a player which autodetects formats" do
+    klass = Class.new
+    Paula.add_player klass
+    Paula.prefer klass
+    Paula.preferred_autodetectors.must_include klass
   end
 
   it "should be able to construct a player object given a file and options" do
