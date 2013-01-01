@@ -9,38 +9,12 @@ module Kernel
   # 4. Regular players by file extension
   def Paula(file, opts)
     file = Paula::SongFile.new(file)
-
-    # iterate through preferred players for the given file extension
-    players = file.played_by(preferred: true)
-    if players
-      begin
-        return players.shift.new(file, opts)
-      rescue Paula::LoadError
-      end while !players.empty?
+    player = file.find_player
+    if player
+      return player.new(file, opts)
+    else
+      raise Paula::LoadError, "no appropriate player found for #{self}"
     end
-
-    # if that didn't succeed, see if any preferred autodetect players
-    # are appropriate
-    player = Paula.preferred_autodetectors.find {|p| p.can_play?(file)}
-    return player.new(file, opts) if player
-
-    # if that also didn't succeed, try the full autodetect player list
-    player = Paula.autodetectors.find {|p| p.can_play?(file)}
-    return player.new(file, opts) if player
-
-    # if we still didn't find anything, look up the full player/extension map
-    players = file.played_by(preferred: false)
-    # raise an exception if no players were found
-    # it's a reasonable guess that the significant part is a regular
-    # file extension, not an Amiga-style prefix
-    raise Paula::LoadError, "unrecognized filetype: #{file.suffix}" if players.nil?
-
-    begin
-      return players.shift.new(file, opts)
-    rescue Paula::LoadError
-    end while !players.empty?
-
-    raise Paula::LoadError, "no appropriate player found for #{file}"
   end
 end
 

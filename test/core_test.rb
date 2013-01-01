@@ -10,69 +10,9 @@ describe Paula do
     Paula.plays('bar').must_equal [Foo]
   end
 
-  it "should be able to create an appropriate player object based on file extension" do
-    file = "song.mod"
-
-    klass = Class.new(Paula::Player) { extensions 'mod' }
-
-    Paula(file, frequency: 44100).must_be_kind_of Paula::Player
-  end
-
-  it "should be able to create an appropriate player object given a player that autodetects formats" do
-    autodetect_player = Class.new(Paula::Player) do
-      detects_formats
-
-      def self.can_play? file
-        true if File.extname(file) == '.format'
-      end
-    end
-
-    Paula('file.format', frequency: 44100).must_be_instance_of autodetect_player
-  end
-
-  it "should be able to prefer a particular player for a given extension" do
-    player1 = Class.new(Paula::Player) { extensions 'format' }
-    player2 = Class.new(Paula::Player) { extensions 'format' }
-
-    Paula('file.format', frequency: 44100).must_be_instance_of player1
-
-    Paula.prefer 'format' => player2
-    Paula('file.format', frequency: 44100).must_be_instance_of player2
-  end
-
-  it "should be able to prefer a player that autodetects formats" do
-    player1 = Class.new(Paula::Player) do
-      detects_formats
-      def self.can_play? file
-        File.extname(file) == '.format'
-      end
-    end
-    player2 = Class.new(Paula::Player) do
-      detects_formats
-      def self.can_play? file
-        File.extname(file) == '.format'
-      end
-    end
-
-    Paula('file.format', frequency: 44100).must_be_instance_of player1
-
-    Paula.prefer player2
-    Paula('file.format', frequency: 44100).must_be_instance_of player2
-  end
-
-  it "should select a preferred player by extension before a preferred autodetecting player" do
-    player1 = Class.new(Paula::Player) do
-      detects_formats
-      def self.can_play? file
-        File.extname(file) == '.format'
-      end
-    end
-    player2 = Class.new(Paula::Player) { extensions 'format' }
-
-    Paula.prefer player1
-    Paula.prefer 'format' => player2
-
-    Paula('file.format', frequency: 44100).must_be_instance_of player2
+  it "should be able to construct a player object given a file and options" do
+    player = Class.new(Paula::Player) { extensions 'mod' }
+    Paula('file.mod', frequency: 44100).must_be_kind_of Paula::Player
   end
 
   it "should raise if a player object is requested for an unrecognized filetype" do
