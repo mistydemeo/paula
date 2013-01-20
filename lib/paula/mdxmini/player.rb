@@ -17,10 +17,10 @@ module Paula
         MDXMini.mdx_set_rate @frequency
         @sample_size = 4096
         @buffer = FFI::MemoryPointer.new :char, @sample_size * 4, true
-        @buffers_per_second = ((@frequency * 16 * 2) / 8) / @sample_size.to_f
+        @buffers_per_millisecond = ((@frequency * 16 * 2) / 8) / 1000 / @sample_size.to_f
 
         @mini = T_mdxmini.new
-        MDXMini.mdx_open @mini, file, file.dirname
+        MDXMini.mdx_open @mini, @filename, @filename.dirname
         MDXMini.mdx_set_max_loop @mini, @loops
 
         @duration = MDXMini.mdx_get_length @mini
@@ -51,11 +51,11 @@ module Paula
       end
 
       def complete?
-        @finished == 0 || @buffers_generated > (duration * @buffers_per_second)
+        @finished == 0 || @buffers_generated > (duration * @buffers_per_millisecond)
       end
 
       def duration
-        @duration
+        @duration * 1000
       end
 
       def channels
