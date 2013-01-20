@@ -60,7 +60,7 @@ module Paula
       )
     end
 
-    class XmpInstrumentSub < FFI::Struct
+    class XmpSubinstrument < FFI::Struct
       layout(
              :vol, :int,
              :gvl, :int,
@@ -77,8 +77,7 @@ module Paula
              :dct, :int,
              :dca, :int,
              :ifc, :int,
-             :ifr, :int,
-             :hld, :int
+             :ifr, :int
       )
     end
 
@@ -91,10 +90,9 @@ module Paula
              :aei, XmpEnvelope,
              :pei, XmpEnvelope,
              :fei, XmpEnvelope,
-             :vts, :int,
-             :wts, :int,
              :map, [XmpInstrumentMap, 121],
-             :sub, XmpInstrumentSub
+             :sub, XmpSubinstrument.ptr,
+             :extra, :pointer
       )
     end
 
@@ -139,6 +137,13 @@ module Paula
       )
     end
 
+    class XmpTestInfo < FFI::Struct
+      layout(
+             :name, [:char, 64],
+             :type, [:char, 64]
+      )
+    end
+
     class XmpChannelInfo < FFI::Struct
       layout(
              :period, :uint,
@@ -156,7 +161,18 @@ module Paula
 
     class XmpModuleInfo < FFI::Struct
       layout(
-             :order, :int,
+             :md5, [:uchar, 16],
+             :vol_base, :int,
+             :mod, XmpModule.ptr,
+             :comment, :pointer,
+             :num_sequences, :int,
+             :seq_data, XmpSequence.ptr
+      )
+    end
+
+    class XmpFrameInfo < FFI::Struct
+      layout(
+             :pos, :int,
              :pattern, :int,
              :row, :int,
              :num_rows, :int,
@@ -164,8 +180,8 @@ module Paula
              :speed, :int,
              :bpm, :int,
              :time, :int,
-             :frame_time, :int,
              :total_time, :int,
+             :frame_time, :int,
              :buffer, :pointer,
              :buffer_size, :int,
              :total_size, :int,
@@ -173,13 +189,8 @@ module Paula
              :loop_count, :int,
              :virt_channels, :int,
              :virt_used, :int,
-             :vol_base, :int,
-             :channel_info, [XmpChannelInfo, 64],
-             :mod, XmpModule.ptr,
-             :comment, :pointer,
              :sequence, :int,
-             :num_sequences, :int,
-             :seq_data, XmpSequence.ptr
+             :channel_info, [XmpChannelInfo, 64],
       )
 
       def buffer
@@ -187,24 +198,32 @@ module Paula
       end
     end
 
-  class XmpTestInfo < FFI::Struct
-    layout(
-           :name, [:char, 64],
-           :type, [:char, 64]
-    )
-  end
+    # Most of XMP's player-based functions are based around its
+    # xmp_context type, which is a typedef for char*
+    typedef :pointer, :xmp_context
 
-    attach_function :xmp_create_context, [  ], :pointer
-    attach_function :xmp_test_module, [ :pointer, :pointer ], :int
-    attach_function :xmp_free_context, [ :pointer ], :void
-    attach_function :xmp_load_module, [ :pointer, :string ], :int
-    attach_function :xmp_release_module, [ :pointer ], :void
-    attach_function :xmp_player_start, [ :pointer, :int, :int ], :int
-    attach_function :xmp_player_frame, [ :pointer ], :int
-    attach_function :xmp_player_get_info, [ :pointer, :pointer ], :void
-    attach_function :xmp_player_end, [ :pointer ], :void
-    attach_function :xmp_inject_event, [ :pointer, :int, :pointer ], :void
+    attach_function :xmp_create_context, [  ], :xmp_context
+    attach_function :xmp_free_context, [ :xmp_context ], :void
+    attach_function :xmp_test_module, [ :string, XmpTestInfo ], :int
+    attach_function :xmp_load_module, [ :xmp_context, :string ], :int
+    attach_function :xmp_release_module, [ :xmp_context ], :void
+    attach_function :xmp_start_player, [ :xmp_context, :int, :int ], :int
+    attach_function :xmp_play_frame, [ :xmp_context ], :int
+    attach_function :xmp_get_frame_info, [ :xmp_context, XmpFrameInfo ], :void
+    attach_function :xmp_end_player, [ :xmp_context ], :void
+    attach_function :xmp_inject_event, [ :xmp_context, :int, :pointer ], :void
+    attach_function :xmp_get_module_info, [ :xmp_context, XmpModuleInfo ], :void
     attach_function :xmp_get_format_list, [  ], :string
-    attach_function :xmp_control, [ :pointer, :int, :varargs ], :int
+    attach_function :xmp_next_position, [ :xmp_context ], :int
+    attach_function :xmp_prev_position, [ :xmp_context ], :int
+    attach_function :xmp_set_position, [ :xmp_context, :int ], :int
+    attach_function :xmp_stop_module, [ :xmp_context ], :void
+    attach_function :xmp_restart_module, [ :xmp_context ], :void
+    attach_function :xmp_seek_time, [ :xmp_context, :int ], :int
+    attach_function :xmp_channel_mute, [ :xmp_context, :int, :int ], :int
+    attach_function :xmp_channel_vol, [ :xmp_context, :int, :int ], :int
+    attach_function :xmp_set_mixer, [ :xmp_context, :int, :int ], :int
+    attach_function :xmp_get_mixer, [ :xmp_context, :int ], :int
+
   end
 end

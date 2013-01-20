@@ -1,3 +1,4 @@
+require 'paula/xmp/library'
 require 'paula/player'
 
 module Paula
@@ -11,7 +12,7 @@ module Paula
 
       def self.finalize ptr
         proc do
-          XMP.xmp_player_end ptr
+          XMP.xmp_end_player ptr
           XMP.xmp_release_module ptr
           XMP.xmp_free_context ptr
         end
@@ -21,28 +22,30 @@ module Paula
         raise Paula::LoadError, "#{file} does not exist" unless file.exist?
 
         test_info = XMP::XmpTestInfo.new
-        XMP.xmp_test_module(file.to_s, test_info) == 0 ? true : false
+        XMP.xmp_test_module(file, test_info) == 0 ? true : false
       end
 
       def initialize file, opts
         super
 
-        @context = XMP.xmp_create_context
-        @info    = XMP::XmpModuleInfo.new
+        @context  = XMP.xmp_create_context
+        @songinfo = XMP::XmpModuleInfo.new
+        @info     = XMP::XmpFrameInfo.new
 
-        if !XMP.xmp_load_module @context, file.to_s
+        if !XMP.xmp_load_module @context, file
           raise Paula::LoadError, "could not open file #{file}"
         end
 
-        XMP.xmp_player_start @context, opts[:frequency], 0
-        XMP.xmp_player_get_info @context, @info
+        XMP.xmp_start_player @context, opts[:frequency], 0
+        XMP.xmp_get_frame_info @context, @info
+        XMP.xmp_get_module_info @context, @songinfo
 
         ObjectSpace.define_finalizer(self, self.class.finalize(@context))
       end
 
       def next_sample
-        XMP.xmp_player_frame @context
-        XMP.xmp_player_get_info @context, @info
+        XMP.xmp_play_frame @context
+        XMP.xmp_get_frame_info @context, @info
         @info.buffer
       end
 
@@ -52,15 +55,15 @@ module Paula
       end
 
       def title
-        return nil if @info[:mod].null?
+        return if @songinfo[:mod].null?
 
-        @info[:mod][:name].to_s
+        @songinfo[:mod][:name].to_s
       end
 
       def comment
-        return nil if @info[:comment].null?
+        return if @songinfo[:comment].null?
 
-        @info[:comment].to_s
+        @songinfo[:comment].to_s
       end
 
       # TODO: implement timeout
