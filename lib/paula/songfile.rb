@@ -2,9 +2,14 @@ require 'pathname'
 
 module Paula
   class SongFile
+    # By default, a SongFile will find players for itself from the
+    # central registry. This can be overridden via #registry=
+    attr_accessor :registry
+
     def initialize file
       return file if file.is_a? Paula::SongFile
       @file = Pathname(File.expand_path file)
+      @registry = Paula::CentralRegistry
     end
 
     def prefix
@@ -16,7 +21,7 @@ module Paula
     end
 
     def played_by opts={preferred: false}
-      Paula.plays(suffix, opts) || Paula.plays(prefix, opts)
+      @registry.plays(suffix, opts) || @registry.plays(prefix, opts)
     end
 
     # Attempts to find a player class which can play the SongFile.
@@ -33,11 +38,11 @@ module Paula
 
       # if that didn't succeed, see if any preferred autodetect players
       # are appropriate
-      player = Paula.preferred_autodetectors.find {|p| p.can_play?(self)}
+      player = @registry.preferred_autodetectors.find {|p| p.can_play?(self)}
       return player if player
 
       # if that also didn't succeed, try the full autodetect player list
-      player = Paula.autodetectors.find {|p| p.can_play?(self)}
+      player = @registry.autodetectors.find {|p| p.can_play?(self)}
       return player if player
 
       # if we still didn't find anything, look up the full player/extension map

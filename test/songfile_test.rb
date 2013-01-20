@@ -2,6 +2,7 @@ require 'minitest/autorun'
 require 'tmpdir'
 require 'fileutils'
 
+require 'paula/registry'
 require 'paula/songfile'
 require 'paula/player'
 
@@ -9,12 +10,22 @@ describe Paula::SongFile do
   before do
     @tmpdir = Dir.mktmpdir
     Dir.chdir @tmpdir
+
+    @registry = Paula::Registry.new
     @file = Paula::SongFile.new('song.mod')
+    @file.registry = @registry
     FileUtils.touch @file
 
-    @player = Class.new(Paula::Player) { extensions 'mod' }
-    @preferred = Class.new(Paula::Player) { extensions 'mod' }
-    Paula.prefer 'mod' => @preferred
+    r = @registry
+    @player = Class.new(Paula::Player) do
+      register_to r
+      extensions 'mod'
+    end
+    @preferred = Class.new(Paula::Player) do
+      register_to r
+      extensions 'mod'
+    end
+    @registry.prefer 'mod' => @preferred
   end
 
   it "should be able to correctly report the song's extension" do
@@ -65,7 +76,9 @@ describe Paula::SongFile do
   end
 
   it "should be able to select an appropriate player given a player that autodetects formats" do
+    r = Paula::Registry.new
     autodetect_player = Class.new(Paula::Player) do
+      register_to r
       detects_formats
 
       def self.can_play? file
@@ -73,63 +86,82 @@ describe Paula::SongFile do
       end
     end
 
-    Paula::SongFile.new('file.format').find_player.must_be_same_as autodetect_player
+    file = Paula::SongFile.new('file.format')
+    file.registry = r
+    file.find_player.must_be_same_as autodetect_player
   end
 
   it "should be able to select a preferred player for a given extension" do
-    player1 = Class.new(Paula::Player) { extensions 'format' }
-    player2 = Class.new(Paula::Player) { extensions 'format' }
+    r = @registry
+    player1 = Class.new(Paula::Player) do
+      register_to r
+      extensions 'format'
+    end
+    player2 = Class.new(Paula::Player) do
+      register_to r
+      extensions 'format'
+    end
     file = Paula::SongFile.new('file.format')
+    file.registry = @registry
 
     file.find_player.must_be_same_as player1
 
-    Paula.prefer 'format' => player2
+    @registry.prefer 'format' => player2
     file.find_player.must_be_same_as player2
   end
 
   it "should be able to select a preferred player that autodetects formats" do
+    r = @registry
     player1 = Class.new(Paula::Player) do
+      register_to r
       detects_formats
       def self.can_play? file
         File.extname(file) == '.format'
       end
     end
     player2 = Class.new(Paula::Player) do
+      register_to r
       detects_formats
       def self.can_play? file
         File.extname(file) == '.format'
       end
     end
     file = Paula::SongFile.new('file.format')
+    file.registry = @registry
 
     file.find_player.must_be_same_as player1
 
-    Paula.prefer player2
+    @registry.prefer player2
     file.find_player.must_be_same_as player2
   end
 
   it "should select a preferred player by extension before a preferred autodetecting player" do
+    r = @registry
     player1 = Class.new(Paula::Player) do
+      register_to r
       detects_formats
       def self.can_play? file
         File.extname(file) == '.format'
       end
     end
-    player2 = Class.new(Paula::Player) { extensions 'format' }
+    player2 = Class.new(Paula::Player) do
+      register_to r
+      extensions 'format'
+    end
     file = Paula::SongFile.new('file.format')
+    file.registry = @registry
 
-    Paula.prefer player1
-    Paula.prefer 'format' => player2
+    @registry.prefer player1
+    @registry.prefer 'format' => player2
 
     file.find_player.must_be_same_as player2
   end
 
-  after do
-    Paula.instance_variable_set :@players, []
-    Paula.instance_variable_set :@extension_map, {}
-    Paula.instance_variable_set :@preferred, []
-    Paula.instance_variable_set :@preferred_map, {}
+  it "should default to looking up players in Paula::CentralRegistry" do
+    Paula::SongFile.new('foo').registry.must_equal Paula::CentralRegistry
+  end
 
+  after do
     FileUtils.remove_entry_secure @tmpdir
   end
 end

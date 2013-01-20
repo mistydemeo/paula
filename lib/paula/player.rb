@@ -14,6 +14,18 @@ module Paula
         end
       end
 
+      def register_to *list
+        self.registries = list
+      end
+
+      def dont_register; registries.clear; end
+
+      def registries= list; @registries = list; end
+      def registries
+        @registries ||= [Paula::CentralRegistry]
+        @registries
+      end
+
       attr_bool :supports_title, :supports_comment, :supports_instruments,
         :supports_notes, :supports_composer
 
@@ -24,15 +36,15 @@ module Paula
       def extensions *ext
         return @extensions if @extensions
 
-        Paula.add_formats self, ext
+        registries.each {|r| r.add_formats self, ext}
         @extensions = ext
       end
 
       def detects_formats
         return if @detects_formats
 
+        registries.each {|r| r.add_player self}
         @detects_formats = true
-        Paula.add_player self
       end
 
       def detects_formats?; @detects_formats || false; end
