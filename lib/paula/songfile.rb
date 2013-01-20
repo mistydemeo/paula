@@ -17,7 +17,7 @@ module Paula
     end
 
     def suffix
-      @file.extname[1..-1].downcase
+      @file.extname[1..-1].to_s.downcase
     end
 
     def played_by opts={preferred: false}

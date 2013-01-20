@@ -32,6 +32,10 @@ describe Paula::SongFile do
     @file.suffix.must_equal 'mod'
   end
 
+  it "should return an empty string for the extname of a file with no extension" do
+    Paula::SongFile.new('foo').suffix.must_equal ""
+  end
+
   it "should be able to correctly report the song's prefix" do
     @file.prefix.must_equal 'song'
   end
