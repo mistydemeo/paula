@@ -82,6 +82,15 @@ module Paula
       def channels
         @info[:virt_channels]
       end
+
+      def seek time
+        if XMP.xmp_seek_time @context, time == 0
+          true
+        else
+          # Need more detail here, but I'm not sure when this would fail
+          raise Paula::SeekError, "seeking failed!"
+        end
+      end
     end
   end
 end

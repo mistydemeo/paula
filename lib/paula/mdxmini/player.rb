@@ -61,6 +61,14 @@ module Paula
       def channels
         MDXMini.mdx_get_tracks @mini
       end
+
+      def seek time
+        # No backwards seeking
+        return if 0 > time
+        (time * @buffers_per_millisecond).to_i.times {next_sample}
+
+        true
+      end
     end
   end
 end

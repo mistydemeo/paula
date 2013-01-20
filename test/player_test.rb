@@ -204,4 +204,8 @@ describe Paula::Player do
   it "should default to one loop if not specified" do
     @player.class.new('file', frequency: 44100).loops_to_play.must_equal 1
   end
+
+  it "should do nothing on #seek if seeking isn't supported" do
+    @player.seek(0).must_be_nil
+  end
 end

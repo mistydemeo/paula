@@ -128,5 +128,16 @@ module Paula
     # depending on the song, or fixed if the hardware being emulated has
     # a specific number of channels.
     def channels; 0; end
+    # Seek to a position in the current song. This should be a no-op if
+    # seeking of any kind is not supported.
+    # The value of `time` is in milliseconds. Negative values should be
+    # used to indicate seeking backwards.
+    # Most players should be able to seek forward simply rendering and
+    # then discarding samples until the song reaches the requested point.
+    # It's acceptable for a subclass to support seeking forward, but not
+    # in reverse.
+    # Players should return true if seeking succeeded, and nil if nothing
+    # was performed.
+    def seek(time); end
   end
 end
