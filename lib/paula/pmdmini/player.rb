@@ -24,8 +24,8 @@ module Paula
 
         # Probably an upstream bug; pmdmini segfaults if pmd_is_pmd()
         # is not called on the file before pmd_play begins
-        PMDMini.pmd_is_pmd file
-        PMDMini.pmd_play file
+        PMDMini.pmd_is_pmd @filename
+        PMDMini.pmd_play @filename
         @duration = PMDMini.pmd_length_sec
 
         @buffers_generated = 0
