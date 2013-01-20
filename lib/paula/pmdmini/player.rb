@@ -20,7 +20,7 @@ module Paula
 
         @sample_size = 4096
         @buffer = FFI::MemoryPointer.new :char, @sample_size * 4, true
-        @buffers_per_second = ((@frequency * 16 * 2) / 8) / @sample_size.to_f
+        @buffers_per_millisecond = ((@frequency * 16 * 2) / 8) / 1000 / @sample_size.to_f
 
         # Probably an upstream bug; pmdmini segfaults if pmd_is_pmd()
         # is not called on the file before pmd_play begins
@@ -63,11 +63,11 @@ module Paula
       end
 
       def complete?
-        @finished == 0 || @buffers_generated > (duration * @buffers_per_second)
+        @finished == 0 || @buffers_generated > (duration * @buffers_per_millisecond)
       end
 
       def duration
-        @duration
+        @duration * 1000
       end
 
       def channels
