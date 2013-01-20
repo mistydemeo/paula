@@ -14,7 +14,7 @@ module Kernel
     if player
       return player.new(file, opts)
     else
-      raise Paula::LoadError, "no appropriate player found for #{self}"
+      raise Paula::LoadError, "no appropriate player found for #{file}"
     end
   end
 end
