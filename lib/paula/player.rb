@@ -116,6 +116,10 @@ module Paula
     # The song's total duration, if possible to estimate. Should be measured in
     # milliseconds. Should return nil if the duration is unknown.
     def duration; 0; end
+    # The player's current position in the song, in milliseconds.
+    # This value should be for the *current* song, even it is not the
+    # first subsong.
+    def position; 0; end
     def current_loop; 0; end
     # Return true if the song is finished. If the player has no internal
     # function to determine if playback is complete, it should be based on
