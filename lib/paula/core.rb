@@ -20,5 +20,6 @@ module Kernel
 end
 
 module Paula
-  CentralRegistry = Registry.new
+  @central_registry = Registry.new
+  def self.registry; @central_registry; end
 end

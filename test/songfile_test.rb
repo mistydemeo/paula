@@ -161,8 +161,8 @@ describe Paula::SongFile do
     file.find_player.must_be_same_as player2
   end
 
-  it "should default to looking up players in Paula::CentralRegistry" do
-    Paula::SongFile.new('foo').registry.must_equal Paula::CentralRegistry
+  it "should default to looking up players in Paula.registry" do
+    Paula::SongFile.new('foo').registry.must_equal Paula.registry
   end
 
   it "should be able to be constructed from another SongFile" do

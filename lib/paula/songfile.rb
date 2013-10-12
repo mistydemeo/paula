@@ -8,7 +8,7 @@ module Paula
 
     def initialize file
       @file = Pathname(File.expand_path file)
-      @registry = Paula::CentralRegistry
+      @registry = Paula.registry
     end
 
     def prefix

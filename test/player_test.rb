@@ -15,7 +15,7 @@ describe Paula::Player do
       extensions 'mod'
     end
     klass.registries.must_equal [@registry]
-    Paula::CentralRegistry.plays('mod').wont_include klass
+    Paula.registry.plays('mod').wont_include klass
   end
 
   it "should be able to opt out of registration altogether" do
@@ -25,7 +25,7 @@ describe Paula::Player do
     end
     klass.registries.must_be_empty
     klass.extensions.must_equal ['mod']
-    Paula::CentralRegistry.plays('mod').wont_include klass
+    Paula.registry.plays('mod').wont_include klass
   end
 
   it "should be able to define the maximum frequency" do

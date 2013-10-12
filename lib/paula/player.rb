@@ -22,7 +22,7 @@ module Paula
 
       def registries= list; @registries = list; end
       def registries
-        @registries ||= [Paula::CentralRegistry]
+        @registries ||= [Paula.registry]
         @registries
       end
 
