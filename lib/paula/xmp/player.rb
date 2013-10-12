@@ -84,7 +84,7 @@ module Paula
       end
 
       def seek time
-        if XMP.xmp_seek_time @context, time == 0
+        if XMP.xmp_seek_time(@context, time) == 0
           true
         else
           # Need more detail here, but I'm not sure when this would fail
