@@ -165,6 +165,12 @@ describe Paula::SongFile do
     Paula::SongFile.new('foo').registry.must_equal Paula::CentralRegistry
   end
 
+  it "should be able to be constructed from another SongFile" do
+    sf = Paula::SongFile.new('foo/bar')
+    sf = Paula::SongFile.new(sf)
+    sf.prefix.must_equal('bar')
+  end
+
   after do
     FileUtils.remove_entry_secure @tmpdir
   end
