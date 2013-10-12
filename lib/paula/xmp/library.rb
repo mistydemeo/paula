@@ -222,8 +222,5 @@ module Paula
     attach_function :xmp_seek_time, [ :xmp_context, :int ], :int
     attach_function :xmp_channel_mute, [ :xmp_context, :int, :int ], :int
     attach_function :xmp_channel_vol, [ :xmp_context, :int, :int ], :int
-    attach_function :xmp_set_mixer, [ :xmp_context, :int, :int ], :int
-    attach_function :xmp_get_mixer, [ :xmp_context, :int ], :int
-
   end
 end
