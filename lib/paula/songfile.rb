@@ -7,7 +7,6 @@ module Paula
     attr_accessor :registry
 
     def initialize file
-      return file if file.is_a? Paula::SongFile
       @file = Pathname(File.expand_path file)
       @registry = Paula::CentralRegistry
     end
