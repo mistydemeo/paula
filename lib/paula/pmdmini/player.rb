@@ -73,6 +73,10 @@ module Paula
         @duration * 1000
       end
 
+      def position
+        @buffers_generated / @buffers_per_millisecond * 4
+      end
+
       def channels
         pmd_get_tracks()
       end
