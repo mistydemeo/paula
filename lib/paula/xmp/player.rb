@@ -82,6 +82,10 @@ module Paula
         @info[:loop_count]
       end
 
+      def position
+        @info[:time]
+      end
+
       def channels
         @info[:virt_channels]
       end
