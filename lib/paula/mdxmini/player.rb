@@ -54,7 +54,7 @@ module Paula
       end
 
       def complete?
-        @finished == 0 || @buffers_generated > (duration * @buffers_per_millisecond)
+        @finished == 0 || position > duration
       end
 
       def duration
