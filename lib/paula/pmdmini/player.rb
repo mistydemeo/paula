@@ -16,7 +16,7 @@ module Paula
 
       def initialize file, opts
         super
-        include Paula::PMDMini
+        extend Paula::PMDMini
 
         pmd_init()
         pmd_setrate(@frequency)
