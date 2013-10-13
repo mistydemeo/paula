@@ -3,20 +3,23 @@ require 'paula/player'
 module Paula
   module PMDMini
     class Player < Paula::Player
+      extend Paula::PMDMini
+
       extensions 'm', 'm2', 'mz'
       supports_title
       supports_composer
       supports_notes
 
       def self.finalize
-        proc { PMDMini.pmd_stop }
+        proc { pmd_stop() }
       end
 
       def initialize file, opts
         super
+        include Paula::PMDMini
 
-        PMDMini.pmd_init
-        PMDMini.pmd_setrate @frequency
+        pmd_init()
+        pmd_setrate(@frequency)
 
         @sample_size = 4096
         @buffer = FFI::MemoryPointer.new :char, @sample_size * 4, true
@@ -24,9 +27,9 @@ module Paula
 
         # Probably an upstream bug; pmdmini segfaults if pmd_is_pmd()
         # is not called on the file before pmd_play begins
-        PMDMini.pmd_is_pmd @filename
-        PMDMini.pmd_play @filename
-        @duration = PMDMini.pmd_length_sec
+        pmd_is_pmd(@filename)
+        pmd_play(@filename)
+        @duration = pmd_length_sec()
 
         @buffers_generated = 0
 
@@ -35,7 +38,7 @@ module Paula
 
       def next_sample
         @buffers_generated += 1
-        @finished = PMDMini.pmd_renderer(@buffer, @sample_size)
+        @finished = pmd_renderer(@buffer, @sample_size)
 
         @buffer.read_string(@buffer.size)
       end
@@ -48,7 +51,7 @@ module Paula
         return @title if @title
 
         buffer = FFI::MemoryPointer.new :char, 100
-        PMDMini.pmd_get_title buffer
+        pmd_get_title(buffer)
         opts = {:replace => '?', :invalid => :replace, :undef => :replace}
         @title = buffer.read_string.force_encoding('Shift_JIS').encode!('utf-8', opts)
       end
@@ -57,7 +60,7 @@ module Paula
         return @composer if @composer
 
         buffer = FFI::MemoryPointer.new :char, 100
-        PMDMini.pmd_get_compo buffer
+        pmd_get_compo(buffer)
         opts = {:replace => '?', :invalid => :replace, :undef => :replace}
         @composer = buffer.read_string.force_encoding('Shift_JIS').encode!('utf-8', opts)
       end
@@ -71,7 +74,7 @@ module Paula
       end
 
       def channels
-        PMDMini.pmd_get_tracks
+        pmd_get_tracks()
       end
 
       def seek time
