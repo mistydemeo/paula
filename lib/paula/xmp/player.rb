@@ -34,6 +34,11 @@ module Paula
         @context  = xmp_create_context()
         @songinfo = XmpModuleInfo.new
         @info     = XmpFrameInfo.new
+        # XMP's loops aren't internal loops based around loop-points,
+        # like other players; this literally means looping the entire
+        # song beginning to end. Since it's inconsistent with other
+        # players, just always set it to 0 (play once).
+        @loops    = 0
 
         if !xmp_load_module(@context, file)
           raise Paula::LoadError, "could not open file #{file}"
