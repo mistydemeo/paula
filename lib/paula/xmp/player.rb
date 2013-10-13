@@ -4,6 +4,8 @@ require 'paula/player'
 module Paula
   module XMP
     class Player < Paula::Player
+      extend Paula::XMP
+
       detects_formats
       maximum_frequency 48000
       supports_title
@@ -12,40 +14,41 @@ module Paula
 
       def self.finalize ptr
         proc do
-          XMP.xmp_end_player ptr
-          XMP.xmp_release_module ptr
-          XMP.xmp_free_context ptr
+          xmp_end_player(ptr)
+          xmp_release_module(ptr)
+          xmp_free_context(ptr)
         end
       end
 
       def self.can_play? file
         raise Paula::LoadError, "#{file} does not exist" unless file.exist?
 
-        test_info = XMP::XmpTestInfo.new
-        XMP.xmp_test_module(file, test_info) == 0 ? true : false
+        test_info = XmpTestInfo.new
+        xmp_test_module(file, test_info) == 0 ? true : false
       end
 
       def initialize file, opts
         super
+        extend Paula::XMP
 
-        @context  = XMP.xmp_create_context
-        @songinfo = XMP::XmpModuleInfo.new
-        @info     = XMP::XmpFrameInfo.new
+        @context  = xmp_create_context()
+        @songinfo = XmpModuleInfo.new
+        @info     = XmpFrameInfo.new
 
-        if !XMP.xmp_load_module @context, file
+        if !xmp_load_module(@context, file)
           raise Paula::LoadError, "could not open file #{file}"
         end
 
-        XMP.xmp_start_player @context, opts[:frequency], 0
-        XMP.xmp_get_frame_info @context, @info
-        XMP.xmp_get_module_info @context, @songinfo
+        xmp_start_player(@context, opts[:frequency], 0)
+        xmp_get_frame_info(@context, @info)
+        xmp_get_module_info(@context, @songinfo)
 
         ObjectSpace.define_finalizer(self, self.class.finalize(@context))
       end
 
       def next_sample
-        XMP.xmp_play_frame @context
-        XMP.xmp_get_frame_info @context, @info
+        xmp_play_frame(@context)
+        xmp_get_frame_info(@context, @info)
         @info.buffer
       end
 
@@ -84,7 +87,7 @@ module Paula
       end
 
       def seek time
-        if XMP.xmp_seek_time(@context, time) == 0
+        if xmp_seek_time(@context, time) == 0
           true
         else
           # Need more detail here, but I'm not sure when this would fail
