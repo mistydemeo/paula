@@ -61,6 +61,10 @@ module Paula
         @duration * 1000
       end
 
+      def position
+        @buffers_generated / @buffers_per_millisecond * 4
+      end
+
       def channels
         mdx_get_tracks(@mini)
       end
