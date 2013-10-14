@@ -123,12 +123,14 @@ module Paula
              :reason, :char
     end
 
+    class UadeNotificationUnion < FFI::Struct
+      layout :msg, :char,
+             :song_end, UadeNotificationSongEnd
+    end
+
     class UadeNotification < FFI::Struct
       layout :type, :uade_notification_type,
-             :union, Class.new do
-               layout :msg, :pointer,
-                      :song_end, UadeNotificationSongEnd
-             end
+             :union, UadeNotificationUnion
     end
 
     attach_function :uade_cleanup_state, [ :pointer ], :void
