@@ -77,7 +77,7 @@ module Paula
         @buffers_generated / @buffers_per_millisecond * 4
       end
 
-      def channels
+      def channel_count
         pmd_get_tracks()
       end
 

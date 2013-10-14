@@ -91,7 +91,7 @@ module Paula
         @info[:time]
       end
 
-      def channels
+      def channel_count
         @info[:virt_channels]
       end
 
