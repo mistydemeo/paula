@@ -40,7 +40,7 @@ module Paula
 
       def next_sample
         @buffers_generated += 1
-        uade_read(@buffer, @buffer_size, @state)
+        @sample_bytes = uade_read(@buffer, @buffer_size, @state)
         @buffer.read_bytes(@buffer_size)
       end
 
@@ -62,7 +62,7 @@ module Paula
 
       def complete?
         return false if duration == 0.0
-        position > duration
+        @sample_bytes == 0 || position > duration
       end
 
       # TODO This currently can't be returned from libuade.
