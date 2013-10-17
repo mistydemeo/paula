@@ -13,7 +13,8 @@ module Paula
         extend Paula::GME
 
         @player = FFI::MemoryPointer.new(:pointer)
-        gme_open_file(file, @player.get_pointer(0), @frequency)
+        ptr = FFI::Pointer.new(@player)
+        gme_open_file(file, ptr, @frequency)
         gme_start_track(@player, 0)
 
         @buffer_size = 4096
