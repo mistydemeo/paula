@@ -5,18 +5,20 @@ module Paula
     extend FFI::Library
     ffi_lib 'gme'
 
+    typedef :string, :gme_err_t
+
     # Basic operations
-    attach_function :gme_open_file, [ :string, :pointer, :int ], :string
+    attach_function :gme_open_file, [ :string, :pointer, :int ], :gme_err_t
     attach_function :gme_track_count, [ :pointer ], :int
-    attach_function :gme_start_track, [ :pointer, :int ], :string
-    attach_function :gme_play, [ :pointer, :int, :pointer ], :string
+    attach_function :gme_start_track, [ :pointer, :int ], :gme_err_t
+    attach_function :gme_play, [ :pointer, :int, :pointer ], :gme_err_t
     attach_function :gme_delete, [ :pointer ], :void
 
     # Track position/length
     attach_function :gme_set_fade, [ :pointer, :int ], :void
     attach_function :gme_track_ended, [ :pointer ], :int
     attach_function :gme_tell, [ :pointer ], :int
-    attach_function :gme_seek, [ :pointer, :int ], :string
+    attach_function :gme_seek, [ :pointer, :int ], :gme_err_t
 
     GME_INFO_ONLY = -1
 
@@ -59,9 +61,9 @@ module Paula
 
     # Informational
     attach_function :gme_warning, [ :pointer ], :string
-    attach_function :gme_load_m3u, [ :pointer, :string ], :string
+    attach_function :gme_load_m3u, [ :pointer, :string ], :gme_err_t
     attach_function :gme_clear_playlist, [ :pointer ], :void
-    attach_function :gme_track_info, [ :pointer, GmeInfoT, :int ], :string
+    attach_function :gme_track_info, [ :pointer, GmeInfoT, :int ], :gme_err_t
     attach_function :gme_free_info, [ GmeInfoT ], :void
 
     # Advanced playback
@@ -96,14 +98,14 @@ module Paula
     attach_function :gme_type_multitrack, [ :pointer ], :int
 
     # Advanced file loading
-    attach_function :gme_open_data, [ :pointer, :long, :pointer, :int ], :string
+    attach_function :gme_open_data, [ :pointer, :long, :pointer, :int ], :gme_err_t
     attach_function :gme_identify_header, [ :string ], :string
     attach_function :gme_identify_extension, [ :string ], :string
-    attach_function :gme_identify_file, [ :string, :pointer ], :string
+    attach_function :gme_identify_file, [ :string, :pointer ], :gme_err_t
     attach_function :gme_new_emu, [ :pointer, :int ], :pointer
-    attach_function :gme_load_file, [ :pointer, :string ], :string
-    attach_function :gme_load_data, [ :pointer, :pointer, :long ], :string
-    attach_function :gme_load_m3u_data, [ :pointer, :pointer, :long ], :string
+    attach_function :gme_load_file, [ :pointer, :string ], :gme_err_t
+    attach_function :gme_load_data, [ :pointer, :pointer, :long ], :gme_err_t
+    attach_function :gme_load_m3u_data, [ :pointer, :pointer, :long ], :gme_err_t
 
     # User data
     attach_function :gme_set_user_data, [ :pointer, :pointer ], :void
