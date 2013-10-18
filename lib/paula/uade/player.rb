@@ -67,6 +67,7 @@ module Paula
           raise Paula::SeekError, "subsong #{song} out of range (max: #{max})"
         end
         uade_seek(:subsong_relative, 0, song, @state)
+        @info = UadeSongInfo.new(uade_get_song_info(@state))
       end
 
       def sample_size
