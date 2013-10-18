@@ -12,9 +12,9 @@ module Paula
         super
         extend Paula::GME
 
-        @player = FFI::MemoryPointer.new(:pointer)
-        ptr = FFI::Pointer.new(@player)
+        ptr = FFI::MemoryPointer.new(:pointer)
         gme_open_file(file, ptr, @frequency)
+        @player = ptr.read_pointer
         gme_start_track(@player, 0)
 
         @buffer_size = 4096
@@ -22,12 +22,12 @@ module Paula
       end
 
       def next_sample
-        gme_play(@pointer, @buffer_size, @buffer)
-        @buffer.read_bytes(@buffer_size)
+        gme_play(@player, @buffer_size, @buffer)
+        @buffer.read_array_of_short(@buffer_size).pack('s*')
       end
 
       def complete?
-        gme_track_ended(@player)
+        gme_track_ended(@player) != 0
       end
     end
   end
