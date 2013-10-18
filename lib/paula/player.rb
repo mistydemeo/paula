@@ -26,7 +26,7 @@ module Paula
         @registries
       end
 
-      attr_bool :supports_title, :supports_comment, :supports_instruments,
+      attr_bool :supports_subsongs, :supports_title, :supports_comment, :supports_instruments,
         :supports_notes, :supports_composer
 
       def maximum_frequency freq=nil
@@ -121,6 +121,17 @@ module Paula
     # first subsong.
     def position; 0; end
     def current_loop; 0; end
+    # The current subsong, for file types that contain more than one song
+    # in the same file. Subsongs are zero-indexed, with 0 representing the
+    # first subsong in a file. Files which a single subsong should simply
+    # always return 0.
+    def subsong; 0; end
+    # Change the active subsong. This causes the player to start from the
+    # beginning of the newly-selected subsong, and may also update the
+    # song's attributes such as duration, title, etc.
+    def subsong=(song); @subsong = song; end
+    # Returns the count of the number of subsongs in the current file.
+    def subsongs; 1; end
     # Return true if the song is finished. If the player has no internal
     # function to determine if playback is complete, it should be based on
     #

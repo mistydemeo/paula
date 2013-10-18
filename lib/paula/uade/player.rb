@@ -7,6 +7,7 @@ module Paula
       extend Paula::UADE
 
       detects_formats
+      supports_subsongs
       supports_title
 
       @state = uade_new_state(nil)
@@ -50,6 +51,22 @@ module Paula
 
       def duration
         @info[:duration] * 1000
+      end
+
+      def subsongs
+        @info[:subsongs][:max] + 1
+      end
+
+      def subsong
+        @info[:subsongs][:cur]
+      end
+
+      def subsong= song
+        max = subsongs - 1
+        if song > max
+          raise Paula::SeekError, "subsong #{song} out of range (max: #{max})"
+        end
+        uade_seek(:subsong_relative, 0, song, @state)
       end
 
       def sample_size
