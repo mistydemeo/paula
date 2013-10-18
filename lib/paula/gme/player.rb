@@ -5,7 +5,7 @@ module Paula
     class Player < Paula::Player
       extend Paula::GME
 
-      extensions 'spc'
+      extensions *%w[vgm gym spc sap nsfe nsf ay gbs hes kss]
       supports_title
 
       def initialize file, opts
