@@ -53,6 +53,8 @@ module Paula
         @title = buffer.read_string.force_encoding('Shift_JIS').encode!('utf-8', opts)
       end
 
+      def format; 'MDX'; end
+
       def complete?
         @finished == 0 || position > duration
       end

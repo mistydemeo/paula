@@ -61,6 +61,10 @@ module Paula
         @info[:subsongs][:cur]
       end
 
+      def format
+        @info[:playername]
+      end
+
       def subsong= song
         max = subsongs - 1
         if song > max

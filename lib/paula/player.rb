@@ -105,6 +105,9 @@ module Paula
     # Non-title metadata about the song. You might want to generate this
     # from multiple other fields. Return nil if there is no appropriate comment.
     def comment; nil; end
+    # Return a string representing the audio format or the hardware the
+    # format is from.
+    def format; nil; end
     # Return the next raw audio sample in the song. Moves the internal
     # position forward.
     def next_sample; ""; end

@@ -74,6 +74,12 @@ module Paula
         @songinfo[:comment].to_s
       end
 
+      def format
+        return if @songinfo[:mod].null?
+
+        @songinfo[:mod][:type].to_s
+      end
+
       # TODO: implement timeout
       def complete?
         @info[:loop_count] > @loops
