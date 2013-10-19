@@ -86,7 +86,7 @@ module Paula
       # TODO This currently can't be returned from libuade.
       # True Amiga songs will almost always have 4 channels, but this
       # is not guaranteed.
-      def channels; 4; end
+      def channel_count; 4; end
 
       def seek time
         if !((time.is_a? Fixnum) || (time.is_a? Float))
