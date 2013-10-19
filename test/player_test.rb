@@ -185,7 +185,7 @@ describe Paula::Player do
   end
 
   it "should default to 0 channels" do
-    @player.channels.must_equal 0
+    @player.channel_count.must_equal 0
   end
 
   it "should always report that it is complete by default" do
