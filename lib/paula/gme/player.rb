@@ -27,6 +27,8 @@ module Paula
         @buffer = FFI::MemoryPointer.new :short, @buffer_size
         @buffers_generated = 0
         @samples_per_millisecond = ((@frequency * 16 * 2) / 8) / 1000 / @buffer.size.to_f
+
+        @subsong = 0
       end
 
       def next_sample
@@ -62,6 +64,22 @@ module Paula
 
       def channel_count
         gme_voice_count(@player)
+      end
+
+      def subsong; @subsong; end
+
+      def subsong=(song)
+        max = subsongs - 1
+        if song > max
+          raise Paula::SeekError, "subsong #{song} out of range (max: #{max})"
+        end
+
+        @subsong = song
+        gme_start_track(@player, song)
+      end
+
+      def subsongs
+        gme_track_count(@player)
       end
     end
   end
