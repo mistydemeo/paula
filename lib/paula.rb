@@ -9,7 +9,7 @@ require "paula/version"
 ['paula/mdxmini', 'paula/pmdmini', 'paula/xmp', 'paula/uade', 'paula/gme'].each do |file|
   begin
     require file
-  rescue LoadError
+  rescue Paula::LoadError
     next
   end
 end
