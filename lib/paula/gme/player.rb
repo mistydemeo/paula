@@ -64,6 +64,10 @@ module Paula
         @info[:comment]
       end
 
+      def format
+        @info[:system]
+      end
+
       def channel_count
         gme_voice_count(@player)
       end
