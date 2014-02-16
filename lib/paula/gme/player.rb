@@ -43,7 +43,9 @@ module Paula
       end
 
       def complete?
-        gme_track_ended(@player) != 0
+        # TODO This should incorporate a fadeout of some kind,
+        # as GME tracks end at a very rough point
+        (gme_track_ended(@player) != 0) || position >= duration
       end
 
       def duration
