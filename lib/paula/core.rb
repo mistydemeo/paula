@@ -8,7 +8,7 @@ module Kernel
   # 2. Preferred players which autodetect formats
   # 3. Regular players which autodetect formats
   # 4. Regular players by file extension
-  def Paula(file, opts)
+  def Paula(file, **opts)
     file = Paula::SongFile.new(file)
     player = file.find_player
     if player

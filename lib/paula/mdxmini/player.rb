@@ -13,7 +13,7 @@ module Paula
         proc { mdx_stop(ptr) }
       end
 
-      def initialize file, opts
+      def initialize file, loops: 1, frequency: 44100
         super
         extend Paula::MDXMini
 

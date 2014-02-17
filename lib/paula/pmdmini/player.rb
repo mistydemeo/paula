@@ -14,7 +14,7 @@ module Paula
         proc { pmd_stop() }
       end
 
-      def initialize file, opts
+      def initialize file, loops: 1, frequency: 44100
         super
         extend Paula::PMDMini
 

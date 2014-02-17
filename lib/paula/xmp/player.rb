@@ -27,7 +27,7 @@ module Paula
         xmp_test_module(file, test_info) == 0 ? true : false
       end
 
-      def initialize file, opts
+      def initialize file, loops: 1, frequency: 44100
         super
         extend Paula::XMP
 
@@ -44,7 +44,7 @@ module Paula
           raise Paula::LoadError, "could not open file #{file}"
         end
 
-        xmp_start_player(@context, opts[:frequency], 0)
+        xmp_start_player(@context, frequency, 0)
         xmp_get_frame_info(@context, @info)
         xmp_get_module_info(@context, @songinfo)
 

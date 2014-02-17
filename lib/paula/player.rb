@@ -58,12 +58,10 @@ module Paula
       end
     end
 
-    def initialize file, opts
+    def initialize file, loops: 1, frequency: 44100
       @filename  = Paula::SongFile.new(file)
-      @loops     = opts[:loops] || 1
-      @frequency = opts[:frequency]
-
-      raise Paula::FrequencyError, "no frequency specified" unless @frequency
+      @loops     = loops
+      @frequency = frequency
 
       # until resampling is implemented
       if self.class.maximum_frequency && @frequency > self.class.maximum_frequency

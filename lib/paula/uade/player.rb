@@ -20,7 +20,7 @@ module Paula
         uade_is_our_file(file, @state) == 0 ? false : true
       end
 
-      def initialize file, opts
+      def initialize file, loops: 1, frequency: 44100
         super
         extend Paula::UADE
 
